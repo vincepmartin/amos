@@ -92,7 +92,7 @@ function Entrance() {
             <input
                 type="text"
                 value={guess}
-                onChange={(e) => {setGuess(e.target.value)}} 
+                onChange={(e) => {setGuess(e.target.value.toLowerCase())}} 
                 onKeyPress={
                     (e) => {
                         if (e.key === 'Enter') {
