@@ -1,5 +1,7 @@
+import arrayShuffle from 'array-shuffle'
 import React from 'react'
 import words from '../../utils/wordBank'
+import BoardGraphic from '../BoardGraphic/BoardGraphic'
 
 const minLetterCount = 4
 const maxLetterCount = 7
@@ -24,7 +26,7 @@ const getRandomLetters = () => {
 function Entrance() {
     const [letters, setLetters] = React.useState(getRandomLetters())
     const [guess, setGuess] = React.useState('')
-    const [validWords, setValidWords] = React.useState()
+    const [validWords, setValidWords] = React.useState([])
     const [validWordsFound, setValidWordsFound] = React.useState([])
     const [score, setScore] = React.useState(0)
     const [feedBack, setFeedBack] = React.useState()
@@ -33,6 +35,7 @@ function Entrance() {
         console.log('OUR USE EFFECT RUNNING')
         // Check if our word is constructed only of our letters.
         const wordHasOurLettersOnly = (word) => {
+            // TODO: JS Exercise: See if you can convert this to a reduce or something.
             for (const c in word) {
                 if (!letters.includes(word[c])) {
                     return false
@@ -54,9 +57,9 @@ function Entrance() {
     }, [])
 
     const handleGuess = (event) => {
-        event.preventDefault()
-        console.log('Handling Guess')
-
+        if (event)
+            event.preventDefault()
+        
         if (validWords.includes(guess) && !validWordsFound.includes(guess)) {
             setValidWordsFound([...validWordsFound, guess])
             setScore(score + guess.length)
@@ -69,22 +72,38 @@ function Entrance() {
         }
     }
 
+    // Scramble the letters.
+    const scrambleLetters = () => {
+        const requiredLetter = letters[0]
+        const theRestScrambled = arrayShuffle(letters.splice(1))
+        setLetters([requiredLetter, ...theRestScrambled])
+    }
+
     return(
         <>
             <h1>Amos's Alphabet</h1>
-            <h2>Required Letter</h2>
-            {letters[0]}
-            <h2>Other letters</h2>
-            {letters.slice(1)}
-            <h2>Score: {score}</h2> 
+            <BoardGraphic letters={letters} height={250} width={250}/>
+            <br/>
+            {`Score: ${score} Words: ${validWordsFound.length} of ${validWords.length}`} 
+            <br/><br/>
+            <input
+                type="text"
+                value={guess}
+                onChange={(e) => {setGuess(e.target.value)}} 
+                onKeyPress={
+                    (e) => {
+                        if (e.key === 'Enter') {
+                            handleGuess()
+                        }
+                    }
+                }
+            />
+            <button onClick={() => handleGuess()}> Submit </button>
+            <button onClick={() => scrambleLetters()}> Scramble </button>
             <h2>{feedBack}</h2>
-            <form onSubmit={handleGuess}>
-                <label>
-                    Guess:
-                    <input type="text" value={guess} onChange={(e) => {setGuess(e.target.value)}} />
-                </label>
-                <input type="submit" value="Guess" />
-            </form>
+            <ul>
+                {validWordsFound.map(vw => <li>{vw}</li>)}
+            </ul>
         </>
     )
 }
