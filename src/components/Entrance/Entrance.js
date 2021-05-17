@@ -35,7 +35,6 @@ function Entrance() {
     const [feedBack, setFeedBack] = React.useState()
 
     React.useEffect(() => {
-        console.log('OUR USE EFFECT RUNNING')
         // Check if our word is constructed only of our letters.
         const wordHasOurLettersOnly = (word) => {
             // TODO: JS Exercise: See if you can convert this to a reduce or something.
