@@ -19,6 +19,9 @@ const getRandomLetters = () => {
         } 
     }
 
+    // Get a vowel for letters[0]
+    letters[0] = ['a','e','i','o','u'][Math.floor(Math.random() * (4) + 0)]
+
     return letters
 }
 
@@ -89,7 +92,7 @@ function Entrance() {
             <input
                 type="text"
                 value={guess}
-                onChange={(e) => {setGuess(e.target.value)}} 
+                onChange={(e) => {setGuess(e.target.value.toLowerCase())}} 
                 onKeyPress={
                     (e) => {
                         if (e.key === 'Enter') {
