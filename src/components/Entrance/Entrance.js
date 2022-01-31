@@ -81,10 +81,15 @@ function Entrance() {
         setLetters([requiredLetter, ...theRestScrambled])
     }
 
+    // Clicking a letter appends that value to your current guess.
+    const onLetterClicked = (letter) => {
+      setGuess(guess + letter)
+    }
+
     return(
         <>
             <h1>Amos's Alphabet</h1>
-            <BoardGraphic letters={letters} height={250} width={250}/>
+          <BoardGraphic letters={letters} height={250} width={250} onClick={onLetterClicked}/>
             <br/>
             {`Score: ${score} Words: ${validWordsFound.length} of ${validWords.length}`} 
             <br/><br/>
